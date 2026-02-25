@@ -48,11 +48,8 @@ export default function HomePage() {
   const [reposLoading, setReposLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
 
-  useEffect(() => {
-    fetch("/api/repo/status")
-      .then((r) => r.json())
-      .then((d) => { if (d.status?.status === "done") router.push("/dashboard"); });
-  }, [router]);
+  // Removed automatic redirect to dashboard to allow user to see repo list and connect/switch.
+  // We only redirect after handleConnect is successful.
 
   useEffect(() => {
     if (status === "authenticated") {
@@ -131,7 +128,7 @@ export default function HomePage() {
                 <span className="text-xs font-bold text-emerald-400">{session.user?.name}</span>
               </div>
               <button
-                onClick={() => signOut()}
+                onClick={() => signOut({ callbackUrl: "/login" })}
                 className="glass-button text-[10px] py-2 px-4 uppercase tracking-widest text-slate-400 hover:text-white"
               >
                 Exit
@@ -303,7 +300,7 @@ export default function HomePage() {
           <div className="flex items-center gap-3 text-[11px] font-black tracking-widest text-white uppercase"><SiHuggingface className="text-amber-500 w-5 h-5" /> HF-AI POWERED</div>
           <div className="flex items-center gap-3 text-[11px] font-black tracking-widest text-white uppercase"><RiShieldKeyholeLine className="text-emerald-500 w-5 h-5" /> ISO-V4 AUDITED</div>
         </div>
-      </main>
-    </div>
+      </main >
+    </div >
   );
 }

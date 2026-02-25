@@ -110,7 +110,7 @@ export function Sidebar() {
           Context Switch
         </button>
 
-        <button onClick={() => signOut()}
+        <button onClick={() => signOut({ callbackUrl: "/login" })}
           className="w-full h-10 flex items-center gap-3 px-4 rounded-xl text-[10px] font-black text-slate-500 hover:text-red-400 hover:bg-red-500/5 transition-all group uppercase tracking-widest"
         >
           <RiLogoutBoxLine className="w-3.5 h-3.5" />
