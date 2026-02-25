@@ -17,7 +17,6 @@ const defaultStore: RepoStore = {
   commits: [],
 };
 
-// Singleton document ID for the app state
 const STATE_ID = "app_state";
 
 export async function readStore(): Promise<RepoStore> {
@@ -28,7 +27,6 @@ export async function readStore(): Promise<RepoStore> {
 
     if (!state) return { ...defaultStore };
 
-    // Remove MongoDB _id and return
     const { _id, ...rest } = state;
     return rest as unknown as RepoStore;
   } catch (err) {
@@ -41,7 +39,6 @@ export async function writeStore(store: RepoStore): Promise<void> {
   try {
     const client = await clientPromise;
     const db = client.db(DB_NAME);
-    // Use replaceOne with upsert to keep a single document for the app state
     await db.collection(COLLECTION_NAME).replaceOne(
       { _id: STATE_ID as any },
       { ...store, _id: STATE_ID as any },
@@ -57,7 +54,6 @@ export async function updateIndexingStatus(status: Partial<IndexingStatus>): Pro
     const client = await clientPromise;
     const db = client.db(DB_NAME);
 
-    // Use $set to update nesting indexingStatus fields
     const updateObj: any = {};
     for (const [key, value] of Object.entries(status)) {
       updateObj[`indexingStatus.${key}`] = value;

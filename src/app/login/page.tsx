@@ -36,15 +36,11 @@ export default function LoginPage() {
     return (
         <div className="min-h-screen bg-[#020205] relative flex flex-col items-center justify-center overflow-hidden">
 
-            {/* ── Background Infrastructure ────────────────────────── */}
-
-            {/* Primary Dark Grid */}
             <div className="absolute inset-0 z-0">
                 <div className="absolute inset-0 bg-[linear-gradient(to_right,#062016_1px,transparent_1px),linear-gradient(to_bottom,#062016_1px,transparent_1px)] bg-[size:40px_40px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_50%,#000_70%,transparent_100%)]" />
                 <div className="absolute inset-0 bg-[linear-gradient(to_right,#051510_1px,transparent_1px),linear-gradient(to_bottom,#051510_1px,transparent_1px)] bg-[size:200px_200px]" />
             </div>
 
-            {/* Scrolling Code Stream */}
             <div className="absolute inset-0 pointer-events-none opacity-[0.05] font-mono text-[10px] overflow-hidden select-none">
                 {[...Array(20)].map((_, i) => (
                     <motion.div
@@ -64,7 +60,6 @@ export default function LoginPage() {
                 ))}
             </div>
 
-            {/* Floating Geometric Nodes */}
             <div className="absolute inset-0 pointer-events-none overflow-hidden">
                 {[...Array(6)].map((_, i) => (
                     <motion.div
@@ -82,7 +77,6 @@ export default function LoginPage() {
                 ))}
             </div>
 
-            {/* Volumetric Glows */}
             <div className="absolute inset-0 radial-mask pointer-events-none">
                 <div className="absolute top-[15%] left-[10%] w-[800px] h-[800px] bg-emerald-950/20 blur-[160px] rounded-full animate-pulse" />
                 <div className="absolute bottom-[20%] right-[15%] w-[600px] h-[600px] bg-green-900/10 blur-[140px] rounded-full animate-float" />
@@ -93,18 +87,14 @@ export default function LoginPage() {
                 />
             </div>
 
-            {/* ── Main Content ─────────────────────────────────────── */}
-
             <motion.div
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
                 className="w-full max-w-[480px] px-6 relative z-10"
             >
-                {/* Advanced Card Structure */}
                 <div className="glass-card p-12 space-y-10 relative group border-white/[0.03] shadow-[0_0_80px_rgba(0,0,0,0.8)]">
 
-                    {/* Interior Scan Effect */}
                     <div className="absolute inset-0 pointer-events-none overflow-hidden rounded-[inherit]">
                         <motion.div
                             animate={{ top: ["-20%", "120%"] }}
@@ -137,7 +127,6 @@ export default function LoginPage() {
                     </div>
 
                     <div className="space-y-8">
-                        {/* Protocol Information Box */}
                         <div className="p-6 rounded-[28px] bg-emerald-500/[0.02] border border-emerald-500/10 space-y-4 relative overflow-hidden">
                             <div className="absolute top-0 right-0 p-3 opacity-20">
                                 <RiShieldKeyholeLine className="text-2xl text-emerald-500" />
@@ -181,7 +170,6 @@ export default function LoginPage() {
                 </div>
             </motion.div>
 
-            {/* ── Footer Telemetry ───────────────────────────────── */}
             <div className="absolute bottom-10 left-10 md:left-auto md:right-10 flex gap-10 opacity-20 pointer-events-none group-hover:opacity-40 transition-opacity">
                 <div className="text-[10px] font-mono text-emerald-500 flex flex-col gap-1.5 border-l border-emerald-500/20 pl-4">
                     <span className="flex items-center gap-2"><RiPulseFill className="animate-pulse" /> NETWORK LAC: 11MS</span>

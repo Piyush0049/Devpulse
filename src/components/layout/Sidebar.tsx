@@ -38,7 +38,6 @@ export function Sidebar() {
     <aside
       className="fixed left-0 top-0 h-full w-[260px] flex flex-col z-40 border-r border-white/[0.04] bg-[#030307]/90 backdrop-blur-3xl"
     >
-      {/* Brand */}
       <div className="p-8">
         <Link href="/dashboard" className="flex items-center gap-4 group">
           <div className="w-10 h-10 rounded-[14px] bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center flex-shrink-0 transition-all duration-700 group-hover:rotate-[15deg] group-hover:scale-110 shadow-[0_0_40px_rgba(16,185,129,0.2)] overflow-hidden p-2">
@@ -51,7 +50,6 @@ export function Sidebar() {
         </Link>
       </div>
 
-      {/* Nav */}
       <nav className="flex-1 px-5 space-y-1 overflow-y-auto custom-scrollbar pt-2">
         <p className="text-[9px] font-black text-slate-700 uppercase tracking-[0.25em] px-4 mb-4">Control Plane</p>
         {NAV.map(({ href, label, icon: Icon, activeIcon: ActiveIcon }) => {
@@ -87,6 +85,7 @@ export function Sidebar() {
           );
         })}
       </nav>
+
       <div className="p-5 space-y-3 mt-auto border-t border-white/[0.04]">
         {session && (
           <div className="flex items-center gap-3 px-4 py-3 rounded-2xl bg-white/[0.02] border border-white/[0.05] mb-2 group/user hover:bg-white/[0.04] transition-all">
@@ -118,7 +117,6 @@ export function Sidebar() {
         </button>
       </div>
 
-      {/* Experimental Card */}
       <div className="px-6 mb-6">
         <div className="p-6 rounded-[24px] bg-emerald-500/5 border border-emerald-500/10 space-y-3 relative overflow-hidden group">
           <div className="absolute -right-10 -bottom-10 opacity-[0.05] group-hover:scale-125 transition-transform duration-1000">
@@ -131,9 +129,6 @@ export function Sidebar() {
           <p className="text-[11px] text-slate-500 font-bold leading-relaxed">Neural analysis active. Global risk vectors identified.</p>
         </div>
       </div>
-
-      {/* Footer */}
-
     </aside>
   );
 }

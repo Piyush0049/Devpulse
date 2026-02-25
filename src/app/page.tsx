@@ -48,9 +48,6 @@ export default function HomePage() {
   const [reposLoading, setReposLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
 
-  // Removed automatic redirect to dashboard to allow user to see repo list and connect/switch.
-  // We only redirect after handleConnect is successful.
-
   useEffect(() => {
     if (status === "authenticated") {
       setReposLoading(true);
@@ -101,13 +98,11 @@ export default function HomePage() {
   return (
     <div className="min-h-screen bg-[#030307] premium-grid relative flex flex-col items-center overflow-hidden">
 
-      {/* Dynamic Background */}
       <div className="absolute inset-0 radial-mask pointer-events-none">
         <div className="absolute top-[-10%] left-[20%] w-[600px] h-[600px] bg-emerald-600/20 blur-[120px] rounded-full animate-pulse" />
         <div className="absolute top-[20%] right-[10%] w-[500px] h-[500px] bg-green-600/10 blur-[140px] rounded-full animate-float" />
       </div>
 
-      {/* Nav */}
       <nav className="w-full max-w-7xl px-8 py-10 flex justify-between items-center relative z-20">
         <div className="flex items-center gap-4">
           <div className="w-12 h-12 rounded-[16px] bg-emerald-600/10 border border-emerald-500/20 flex items-center justify-center shadow-[0_0_40px_rgba(16,185,129,0.2)] overflow-hidden">
@@ -145,7 +140,6 @@ export default function HomePage() {
         </div>
       </nav>
 
-      {/* Hero */}
       <main className="flex-1 w-full max-w-6xl px-6 flex flex-col items-center justify-center text-center relative z-10 pt-10 pb-20">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -153,7 +147,6 @@ export default function HomePage() {
           transition={{ duration: 0.8, ease: "easeOut" }}
           className="w-full space-y-12"
         >
-          {/* Eyebrow */}
           <div className="inline-flex items-center gap-3 px-6 py-2 rounded-full border border-emerald-500/20 bg-emerald-500/5 text-emerald-400 text-xs font-bold tracking-widest uppercase mb-4">
             <RiSparkling2Fill className="animate-pulse" />
             Empowering Next-Gen Engineering
@@ -168,7 +161,6 @@ export default function HomePage() {
             Professional AI-powered engineering intelligence dashboard. Synchronize your codebase and unlock deep architectural insights in seconds.
           </p>
 
-          {/* Connect Card / Repo List */}
           <div className="w-full max-w-4xl mx-auto pt-6">
             <div className="glass-card p-8 md:p-10 relative group hover-glow min-h-[300px] flex flex-col justify-center">
               <AnimatePresence mode="wait">
@@ -281,7 +273,6 @@ export default function HomePage() {
           </div>
         </motion.div>
 
-        {/* Features Preview */}
         <div className="mt-40 grid grid-cols-1 md:grid-cols-3 gap-8 w-full max-w-5xl mx-auto">
           {FEATURES.map((f) => (
             <div key={f.title} className="glass-card p-8 group text-left hover:border-white/20 transition-all">
@@ -294,7 +285,6 @@ export default function HomePage() {
           ))}
         </div>
 
-        {/* Trust Badges */}
         <div className="mt-40 flex flex-wrap justify-center gap-12 opacity-30 grayscale hover:grayscale-0 hover:opacity-100 transition-all duration-700">
           <div className="flex items-center gap-3 text-[11px] font-black tracking-widest text-white uppercase"><RiCheckboxCircleFill className="text-emerald-500 w-5 h-5" /> AES-256 SECURED</div>
           <div className="flex items-center gap-3 text-[11px] font-black tracking-widest text-white uppercase"><SiHuggingface className="text-amber-500 w-5 h-5" /> HF-AI POWERED</div>

@@ -24,7 +24,6 @@ export async function POST(req: NextRequest) {
     const { owner, repo } = parsed;
     const token = githubToken?.trim() || process.env.GITHUB_TOKEN;
 
-    // Verify token works before starting indexing
     const auth = await verifyGitHubToken(token);
     if (!auth.ok) {
       return NextResponse.json({ error: `GitHub API error: ${auth.error}` }, { status: 400 });
@@ -35,7 +34,6 @@ export async function POST(req: NextRequest) {
       }, { status: 429 });
     }
 
-    // Verify repo is accessible before starting background indexing
     let repoInfo;
     try {
       repoInfo = await getRepoInfo(owner, repo, token);
@@ -56,7 +54,6 @@ export async function POST(req: NextRequest) {
       }, { status: 400 });
     }
 
-    // Mark as indexing
     await updateIndexingStatus({
       status: "indexing",
       progress: 0,
@@ -66,7 +63,6 @@ export async function POST(req: NextRequest) {
       startedAt: new Date().toISOString(),
     });
 
-    // Start indexing in background (non-blocking), pass already-fetched repoInfo
     indexInBackground(owner, repo, token, repoInfo).catch(async (err) => {
       console.error("Background indexing error:", err);
       await updateIndexingStatus({
@@ -90,7 +86,6 @@ export async function POST(req: NextRequest) {
 
 async function indexInBackground(owner: string, repo: string, token?: string, repoInfo?: Awaited<ReturnType<typeof getRepoInfo>>) {
   try {
-    // Use pre-fetched repoInfo if available, otherwise fetch it
     if (!repoInfo) {
       repoInfo = await getRepoInfo(owner, repo, token);
     }
@@ -100,7 +95,6 @@ async function indexInBackground(owner: string, repo: string, token?: string, re
       repoInfo,
     });
 
-    // Index files
     const vectors: VectorEntry[] = [];
     const filesMeta: Array<{ path: string; language: string; lines: number; size: number }> = [];
 
@@ -119,9 +113,8 @@ async function indexInBackground(owner: string, repo: string, token?: string, re
       token
     );
 
-    // Cap files to keep indexing fast
     const filesToEmbed = files.slice(0, 50);
-    const FILE_BATCH = 4; // embed this many files in parallel
+    const FILE_BATCH = 4;
 
     await updateIndexingStatus({
       current: "Creating embeddings...",
@@ -142,9 +135,8 @@ async function indexInBackground(owner: string, repo: string, token?: string, re
         batch.map(async (file) => {
           try {
             const chunks = chunkFile(file);
-            const chunkTexts = chunks.map((c) => c.text).slice(0, 2); // max 2 chunks per file
+            const chunkTexts = chunks.map((c) => c.text).slice(0, 2);
 
-            // Embed chunks in parallel
             const embeddings = await Promise.all(chunkTexts.map((text) => embedText(text)));
 
             const entries = buildVectorEntries(
@@ -168,13 +160,11 @@ async function indexInBackground(owner: string, repo: string, token?: string, re
         })
       );
 
-      // Small pause between file batches to respect HF rate limits
       if (i + FILE_BATCH < filesToEmbed.length) {
         await new Promise((r) => setTimeout(r, 80));
       }
     }
 
-    // Save to store
     const store = await readStore();
     store.repoInfo = repoInfo;
     store.vectors = vectors;
