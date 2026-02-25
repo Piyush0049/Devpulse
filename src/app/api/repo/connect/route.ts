@@ -57,7 +57,7 @@ export async function POST(req: NextRequest) {
     }
 
     // Mark as indexing
-    updateIndexingStatus({
+    await updateIndexingStatus({
       status: "indexing",
       progress: 0,
       total: 0,
@@ -67,9 +67,9 @@ export async function POST(req: NextRequest) {
     });
 
     // Start indexing in background (non-blocking), pass already-fetched repoInfo
-    indexInBackground(owner, repo, token, repoInfo).catch((err) => {
+    indexInBackground(owner, repo, token, repoInfo).catch(async (err) => {
       console.error("Background indexing error:", err);
-      updateIndexingStatus({
+      await updateIndexingStatus({
         status: "error",
         error: err.message || "Indexing failed",
       });
@@ -95,7 +95,7 @@ async function indexInBackground(owner: string, repo: string, token?: string, re
       repoInfo = await getRepoInfo(owner, repo, token);
     }
 
-    updateIndexingStatus({
+    await updateIndexingStatus({
       current: `Connected to ${repoInfo.fullName}`,
       repoInfo,
     });
@@ -108,8 +108,8 @@ async function indexInBackground(owner: string, repo: string, token?: string, re
       owner,
       repo,
       repoInfo.defaultBranch,
-      (current, indexed, total) => {
-        updateIndexingStatus({
+      async (current, indexed, total) => {
+        await updateIndexingStatus({
           current: `Indexing: ${current}`,
           progress: indexed,
           total,
@@ -123,7 +123,7 @@ async function indexInBackground(owner: string, repo: string, token?: string, re
     const filesToEmbed = files.slice(0, 50);
     const FILE_BATCH = 4; // embed this many files in parallel
 
-    updateIndexingStatus({
+    await updateIndexingStatus({
       current: "Creating embeddings...",
       total: filesToEmbed.length,
     });
@@ -132,7 +132,7 @@ async function indexInBackground(owner: string, repo: string, token?: string, re
     for (let i = 0; i < filesToEmbed.length; i += FILE_BATCH) {
       const batch = filesToEmbed.slice(i, i + FILE_BATCH);
 
-      updateIndexingStatus({
+      await updateIndexingStatus({
         current: `Embedding: ${batch[0]?.path}`,
         progress: indexed,
         filesIndexed: indexed,
@@ -175,7 +175,7 @@ async function indexInBackground(owner: string, repo: string, token?: string, re
     }
 
     // Save to store
-    const store = readStore();
+    const store = await readStore();
     store.repoInfo = repoInfo;
     store.vectors = vectors;
     store.files = filesMeta;
@@ -192,10 +192,10 @@ async function indexInBackground(owner: string, repo: string, token?: string, re
       completedAt: new Date().toISOString(),
     };
 
-    writeStore(store);
+    await writeStore(store);
   } catch (error: unknown) {
     const message = error instanceof Error ? error.message : "Unknown error";
-    updateIndexingStatus({
+    await updateIndexingStatus({
       status: "error",
       error: message,
     });

@@ -93,7 +93,7 @@ async function getAllFiles(
   owner: string,
   repo: string,
   branch: string,
-  onProgress?: (current: string, indexed: number, total: number) => void
+  onProgress?: (current: string, indexed: number, total: number) => Promise<void>
 ): Promise<FileEntry[]> {
   const { data: tree } = await octokit.git.getTree({
     owner,
@@ -146,7 +146,7 @@ async function getAllFiles(
     }
 
     if (onProgress) {
-      onProgress(
+      await onProgress(
         batch[0]?.path || "",
         files.length,
         codeFiles.length
@@ -166,7 +166,7 @@ export async function indexRepository(
   owner: string,
   repo: string,
   branch: string,
-  onProgress: (current: string, indexed: number, total: number) => void,
+  onProgress: (current: string, indexed: number, total: number) => Promise<void>,
   token?: string
 ): Promise<FileEntry[]> {
   const octokit = getOctokit(token);

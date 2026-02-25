@@ -4,7 +4,7 @@ import { getPullRequests } from "@/lib/github";
 
 export async function GET() {
   try {
-    const store = readStore();
+    const store = await readStore();
 
     if (!store.repoInfo) {
       return NextResponse.json({ error: "No repository connected" }, { status: 400 });

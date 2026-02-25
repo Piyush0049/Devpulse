@@ -1,34 +1,28 @@
 import { NextResponse } from "next/server";
 import { readStore } from "@/lib/store";
 import { analyzeFileRisk } from "@/lib/analysis";
-import fs from "fs";
-import path from "path";
 
 export async function GET() {
   try {
-    const store = readStore();
+    const store = await readStore();
 
     if (!store.repoInfo) {
       return NextResponse.json({ error: "No repository connected" }, { status: 400 });
     }
 
-    // Read file contents from indexed files to analyze
-    const vectorsFile = path.join(process.cwd(), "data", "vectors.json");
     let fileContents: Record<string, string> = {};
+    const vectors = store.vectors || [];
 
-    if (fs.existsSync(vectorsFile)) {
-      const vectors = JSON.parse(fs.readFileSync(vectorsFile, "utf-8"));
-      // Extract file contents from vector chunks
-      for (const v of vectors) {
-        if (!fileContents[v.metadata.path]) {
-          fileContents[v.metadata.path] = v.text.substring(v.text.indexOf("\n\n") + 2);
-        } else {
-          fileContents[v.metadata.path] += "\n" + v.text.substring(v.text.indexOf("\n\n") + 2);
-        }
+    // Extract file contents from vector chunks
+    for (const v of vectors) {
+      if (!fileContents[v.metadata.path]) {
+        fileContents[v.metadata.path] = v.text.substring(v.text.indexOf("\n\n") + 2);
+      } else {
+        fileContents[v.metadata.path] += "\n" + v.text.substring(v.text.indexOf("\n\n") + 2);
       }
     }
 
-    const risks = store.files.map((file) => {
+    const risks = store.files.map((file: any) => {
       const content = fileContents[file.path] || "";
       return analyzeFileRisk(file.path, content, file.lines, file.language);
     });

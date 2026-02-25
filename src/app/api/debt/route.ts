@@ -1,33 +1,28 @@
 import { NextResponse } from "next/server";
 import { readStore } from "@/lib/store";
 import { analyzeTechDebt } from "@/lib/analysis";
-import fs from "fs";
-import path from "path";
 
 export async function GET() {
   try {
-    const store = readStore();
+    const store = await readStore();
 
     if (!store.repoInfo) {
       return NextResponse.json({ error: "No repository connected" }, { status: 400 });
     }
 
     // Reconstruct file contents from vector chunks
-    const vectorsFile = path.join(process.cwd(), "data", "vectors.json");
     const fileContents: Record<string, string> = {};
+    const vectors = store.vectors || [];
 
-    if (fs.existsSync(vectorsFile)) {
-      const vectors = JSON.parse(fs.readFileSync(vectorsFile, "utf-8"));
-      for (const v of vectors) {
-        if (!fileContents[v.metadata.path]) {
-          fileContents[v.metadata.path] = v.text.substring(v.text.indexOf("\n\n") + 2);
-        } else {
-          fileContents[v.metadata.path] += "\n" + v.text.substring(v.text.indexOf("\n\n") + 2);
-        }
+    for (const v of vectors) {
+      if (!fileContents[v.metadata.path]) {
+        fileContents[v.metadata.path] = v.text.substring(v.text.indexOf("\n\n") + 2);
+      } else {
+        fileContents[v.metadata.path] += "\n" + v.text.substring(v.text.indexOf("\n\n") + 2);
       }
     }
 
-    const filesWithContent = store.files.map((f) => ({
+    const filesWithContent = store.files.map((f: any) => ({
       ...f,
       content: fileContents[f.path] || "",
     }));

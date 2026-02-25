@@ -10,7 +10,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Question is required" }, { status: 400 });
     }
 
-    const store = readStore();
+    const store = await readStore();
 
     if (store.indexingStatus.status !== "done") {
       return NextResponse.json(

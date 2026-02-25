@@ -1,16 +1,8 @@
-import fs from "fs";
-import path from "path";
+import clientPromise from "./mongodb";
 import type { RepoStore, IndexingStatus } from "@/types";
 
-const DATA_DIR = path.join(process.cwd(), "data");
-const STORE_FILE = path.join(DATA_DIR, "store.json");
-const VECTORS_FILE = path.join(DATA_DIR, "vectors.json");
-
-function ensureDataDir() {
-  if (!fs.existsSync(DATA_DIR)) {
-    fs.mkdirSync(DATA_DIR, { recursive: true });
-  }
-}
+const DB_NAME = "devpulse";
+const COLLECTION_NAME = "state";
 
 const defaultStore: RepoStore = {
   indexingStatus: {
@@ -25,48 +17,68 @@ const defaultStore: RepoStore = {
   commits: [],
 };
 
-export function readStore(): RepoStore {
-  ensureDataDir();
+// Singleton document ID for the app state
+const STATE_ID = "app_state";
+
+export async function readStore(): Promise<RepoStore> {
   try {
-    if (!fs.existsSync(STORE_FILE)) return { ...defaultStore };
-    const raw = fs.readFileSync(STORE_FILE, "utf-8");
-    const store = JSON.parse(raw) as RepoStore;
-    // Ensure arrays are initialized
-    store.vectors = [];
-    store.files = store.files || [];
-    store.commits = store.commits || [];
-    // Load vectors separately (can be large)
-    if (fs.existsSync(VECTORS_FILE)) {
-      try {
-        const vectorsRaw = fs.readFileSync(VECTORS_FILE, "utf-8");
-        store.vectors = JSON.parse(vectorsRaw) || [];
-      } catch {
-        store.vectors = [];
-      }
-    }
-    return store;
-  } catch {
+    const client = await clientPromise;
+    const db = client.db(DB_NAME);
+    const state = await db.collection(COLLECTION_NAME).findOne({ _id: STATE_ID as any });
+
+    if (!state) return { ...defaultStore };
+
+    // Remove MongoDB _id and return
+    const { _id, ...rest } = state;
+    return rest as unknown as RepoStore;
+  } catch (err) {
+    console.error("Failed to read from MongoDB:", err);
     return { ...defaultStore };
   }
 }
 
-export function writeStore(store: RepoStore) {
-  ensureDataDir();
-  const { vectors, ...rest } = store;
-  fs.writeFileSync(STORE_FILE, JSON.stringify(rest, null, 2));
-  // Write vectors separately
-  fs.writeFileSync(VECTORS_FILE, JSON.stringify(vectors));
+export async function writeStore(store: RepoStore): Promise<void> {
+  try {
+    const client = await clientPromise;
+    const db = client.db(DB_NAME);
+    // Use replaceOne with upsert to keep a single document for the app state
+    await db.collection(COLLECTION_NAME).replaceOne(
+      { _id: STATE_ID as any },
+      { ...store, _id: STATE_ID as any },
+      { upsert: true }
+    );
+  } catch (err) {
+    console.error("Failed to write to MongoDB:", err);
+  }
 }
 
-export function updateIndexingStatus(status: Partial<IndexingStatus>) {
-  const store = readStore();
-  store.indexingStatus = { ...store.indexingStatus, ...status };
-  const { vectors, ...rest } = store;
-  ensureDataDir();
-  fs.writeFileSync(STORE_FILE, JSON.stringify(rest, null, 2));
+export async function updateIndexingStatus(status: Partial<IndexingStatus>): Promise<void> {
+  try {
+    const client = await clientPromise;
+    const db = client.db(DB_NAME);
+
+    // Use $set to update nesting indexingStatus fields
+    const updateObj: any = {};
+    for (const [key, value] of Object.entries(status)) {
+      updateObj[`indexingStatus.${key}`] = value;
+    }
+
+    await db.collection(COLLECTION_NAME).updateOne(
+      { _id: STATE_ID as any },
+      { $set: updateObj },
+      { upsert: true }
+    );
+  } catch (err) {
+    console.error("Failed to update indexing status in MongoDB:", err);
+  }
 }
 
-export function clearStore() {
-  ensureDataDir();
-  writeStore({ ...defaultStore });
+export async function clearStore(): Promise<void> {
+  try {
+    const client = await clientPromise;
+    const db = client.db(DB_NAME);
+    await db.collection(COLLECTION_NAME).deleteOne({ _id: STATE_ID as any });
+  } catch (err) {
+    console.error("Failed to clear MongoDB store:", err);
+  }
 }

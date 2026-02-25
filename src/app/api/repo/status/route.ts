@@ -3,7 +3,7 @@ import { readStore } from "@/lib/store";
 
 export async function GET() {
   try {
-    const store = readStore();
+    const store = await readStore();
     return NextResponse.json({
       status: store.indexingStatus,
       repoInfo: store.repoInfo,
