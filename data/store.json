@@ -1,0 +1,188 @@
+{
+  "indexingStatus": {
+    "status": "done",
+    "progress": 24,
+    "total": 24,
+    "current": "Indexing complete",
+    "filesIndexed": 24,
+    "repoInfo": {
+      "owner": "Piyush0049",
+      "name": "bluphlux_ui",
+      "fullName": "Piyush0049/bluphlux_ui",
+      "description": "",
+      "language": "TypeScript",
+      "stars": 0,
+      "forks": 0,
+      "openIssues": 1,
+      "defaultBranch": "main",
+      "url": "https://github.com/Piyush0049/bluphlux_ui",
+      "lastPushedAt": "2026-02-24T17:38:33Z",
+      "size": 90
+    },
+    "startedAt": "2026-02-25T04:26:43.967Z",
+    "completedAt": "2026-02-25T04:32:17.724Z"
+  },
+  "files": [
+    {
+      "path": "README.md",
+      "language": "Markdown",
+      "lines": 100,
+      "size": 3161
+    },
+    {
+      "path": "eslint.config.js",
+      "language": "JavaScript",
+      "lines": 29,
+      "size": 734
+    },
+    {
+      "path": "package.json",
+      "language": "JSON",
+      "lines": 50,
+      "size": 1328
+    },
+    {
+      "path": "src/App.tsx",
+      "language": "TypeScript",
+      "lines": 74,
+      "size": 2758
+    },
+    {
+      "path": "src/components/InterviewCalendar.tsx",
+      "language": "TypeScript",
+      "lines": 151,
+      "size": 5670
+    },
+    {
+      "path": "src/components/InterviewForm.tsx",
+      "language": "TypeScript",
+      "lines": 219,
+      "size": 8890
+    },
+    {
+      "path": "src/components/Notification.tsx",
+      "language": "TypeScript",
+      "lines": 63,
+      "size": 2389
+    },
+    {
+      "path": "src/components/datePicker.tsx",
+      "language": "TypeScript",
+      "lines": 40,
+      "size": 1248
+    },
+    {
+      "path": "src/components/timeSlotEnd.tsx",
+      "language": "TypeScript",
+      "lines": 54,
+      "size": 1341
+    },
+    {
+      "path": "src/components/timeSlotStart.tsx",
+      "language": "TypeScript",
+      "lines": 71,
+      "size": 2420
+    },
+    {
+      "path": "src/context/InterviewContext.tsx",
+      "language": "TypeScript",
+      "lines": 88,
+      "size": 2412
+    },
+    {
+      "path": "src/data/data.json",
+      "language": "JSON",
+      "lines": 26,
+      "size": 542
+    },
+    {
+      "path": "src/globalStyles.ts",
+      "language": "TypeScript",
+      "lines": 19,
+      "size": 314
+    },
+    {
+      "path": "src/main.tsx",
+      "language": "TypeScript",
+      "lines": 18,
+      "size": 510
+    },
+    {
+      "path": "src/pages/Dashboard.tsx",
+      "language": "TypeScript",
+      "lines": 252,
+      "size": 11148
+    },
+    {
+      "path": "src/pages/EditInterview.tsx",
+      "language": "TypeScript",
+      "lines": 55,
+      "size": 2454
+    },
+    {
+      "path": "src/pages/ScheduleInterview.tsx",
+      "language": "TypeScript",
+      "lines": 31,
+      "size": 1358
+    },
+    {
+      "path": "src/store/interviewSlice.ts",
+      "language": "TypeScript",
+      "lines": 55,
+      "size": 1510
+    },
+    {
+      "path": "src/store/store.ts",
+      "language": "TypeScript",
+      "lines": 18,
+      "size": 503
+    },
+    {
+      "path": "src/vite-env.d.ts",
+      "language": "TypeScript",
+      "lines": 2,
+      "size": 38
+    },
+    {
+      "path": "tsconfig.app.json",
+      "language": "JSON",
+      "lines": 27,
+      "size": 665
+    },
+    {
+      "path": "tsconfig.json",
+      "language": "JSON",
+      "lines": 8,
+      "size": 119
+    },
+    {
+      "path": "tsconfig.node.json",
+      "language": "JSON",
+      "lines": 25,
+      "size": 593
+    },
+    {
+      "path": "vite.config.ts",
+      "language": "TypeScript",
+      "lines": 8,
+      "size": 222
+    }
+  ],
+  "commits": [],
+  "repoInfo": {
+    "owner": "Piyush0049",
+    "name": "bluphlux_ui",
+    "fullName": "Piyush0049/bluphlux_ui",
+    "description": "",
+    "language": "TypeScript",
+    "stars": 0,
+    "forks": 0,
+    "openIssues": 1,
+    "defaultBranch": "main",
+    "url": "https://github.com/Piyush0049/bluphlux_ui",
+    "lastPushedAt": "2026-02-24T17:38:33Z",
+    "size": 90
+  },
+  "lastUpdated": "2026-02-25T04:32:17.724Z",
+  "githubToken": ""
+}
