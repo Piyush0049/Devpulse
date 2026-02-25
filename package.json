@@ -17,7 +17,7 @@
     "date-fns": "^3.6.0",
     "framer-motion": "^11.3.19",
     "lucide-react": "^0.441.0",
-    "mongodb": "^7.1.0",
+    "mongodb": "^5.9.2",
     "next": "^16.1.6",
     "next-auth": "^4.24.13",
     "react": "^18",
