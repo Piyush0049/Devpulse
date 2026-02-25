@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { readStore } from "@/lib/store";
+import { readStore, writeStore } from "@/lib/store";
 import { analyzeFileRisk, computeHealthScore, analyzeTechDebt, generateAIInsights } from "@/lib/analysis";
 import { getCommitActivity } from "@/lib/github";
 
@@ -39,6 +39,10 @@ export async function GET() {
     if (!commits || commits.length === 0) {
       try {
         commits = await getCommitActivity(store.repoInfo.owner, store.repoInfo.name, store.githubToken);
+        if (commits.length > 0) {
+          store.commits = commits;
+          await writeStore(store);
+        }
       } catch {
         commits = [];
       }

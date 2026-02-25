@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { parseRepoUrl, getRepoInfo, indexRepository, verifyGitHubToken } from "@/lib/github";
+import { parseRepoUrl, getRepoInfo, indexRepository, verifyGitHubToken, getCommitActivity } from "@/lib/github";
 import { embedText } from "@/lib/embeddings";
 import { chunkFile, buildVectorEntries } from "@/lib/vectorStore";
 import { readStore, writeStore, updateIndexingStatus } from "@/lib/store";
@@ -165,10 +165,17 @@ async function indexInBackground(owner: string, repo: string, token?: string, re
       }
     }
 
+    // Fetch commit activity during indexing
+    await updateIndexingStatus({
+      current: "Auditing temporal activity...",
+    });
+    const commits = await getCommitActivity(owner, repo, token);
+
     const store = await readStore();
     store.repoInfo = repoInfo;
     store.vectors = vectors;
     store.files = filesMeta;
+    store.commits = commits;
     store.lastUpdated = new Date().toISOString();
     if (token) store.githubToken = token;
     store.indexingStatus = {
