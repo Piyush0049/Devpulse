@@ -2,12 +2,18 @@
   "name": "devpulse-ai",
   "version": "0.1.0",
   "private": true,
+
+  "engines": {
+    "node": ">=20.9.0"
+  },
+
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
   },
+
   "dependencies": {
     "@huggingface/inference": "^4.13.12",
     "@next-auth/mongodb-adapter": "^1.1.3",
