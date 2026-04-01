@@ -10,7 +10,6 @@ export async function GET() {
       return NextResponse.json({ error: "No repository connected" }, { status: 400 });
     }
 
-    // Reconstruct file contents from vector chunks
     const fileContents: Record<string, string> = {};
     const vectors = store.vectors || [];
 
